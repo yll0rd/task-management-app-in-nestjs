@@ -22,4 +22,8 @@ export class TasksService {
     this.tasks.push(task);
     return task;
   }
+
+  getSingleTaskById(id: string): Task | null {
+    return this.tasks.find((task) => task.id === id) || null;
+  }
 }
