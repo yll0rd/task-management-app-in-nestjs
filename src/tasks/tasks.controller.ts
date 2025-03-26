@@ -35,7 +35,7 @@ export class TasksController {
   }
 
   @Get('/:id')
-  getSingleTaskById(@Param('id') id: string): Task | null {
+  getSingleTaskById(@Param('id') id: string): Task {
     console.log(id);
     return this.tasksService.getSingleTaskById(id);
   }
