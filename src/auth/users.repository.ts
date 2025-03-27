@@ -1,5 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { DataSource, Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { UserEntity } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-creds.dto';
 
@@ -12,6 +17,15 @@ export class UsersRepository extends Repository<UserEntity> {
   async createUser(authCredsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredsDto;
     const user = this.create({ username, password });
-    await this.save(user);
+    try {
+      await this.save(user);
+    } catch (error) {
+      if (error.code === '23505') {
+        //  duplicate username
+        throw new ConflictException('Username already exists');
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 }
