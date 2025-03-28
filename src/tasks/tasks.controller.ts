@@ -42,24 +42,31 @@ export class TasksController {
   }
 
   @Get('/:id')
-  getSingleTaskById(@Param('id') id: string): Promise<Task> {
+  getSingleTaskById(
+    @Param('id') id: string,
+    @GetUser() user: UserEntity,
+  ): Promise<Task> {
     console.log(id);
-    return this.tasksService.getSingleTaskById(id);
+    return this.tasksService.getSingleTaskById(id, user);
   }
 
   @Delete('/:id')
-  deleteTask(@Param('id') id: string): Promise<void> {
+  deleteTask(
+    @Param('id') id: string,
+    @GetUser() user: UserEntity,
+  ): Promise<void> {
     console.log(id);
-    return this.tasksService.deleteTask(id);
+    return this.tasksService.deleteTask(id, user);
   }
 
   @Patch('/:id/status')
   updateTaskStatus(
     @Param('id') id: string,
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
+    @GetUser() user: UserEntity,
   ): Promise<Task> {
     const { status } = updateTaskStatusDto;
     console.log(id, status);
-    return this.tasksService.updateTaskStatus(id, status);
+    return this.tasksService.updateTaskStatus(id, status, user);
   }
 }
